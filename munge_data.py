@@ -25,7 +25,8 @@ if len(train_df.Age[ train_df.Age.isnull() ]) > 0:
 
 print(train_df.head(10))
 
-train_df = train_df[['PassengerId', 'Pclass', 'Age', 'SibSp', 'Parch', 'Fare', 'Embarked', 'Gender', 'Survived']]
+#train_df = train_df[['PassengerId', 'Pclass', 'Age', 'SibSp', 'Parch', 'Fare', 'Embarked', 'Gender', 'Survived']]
+train_df = train_df[['PassengerId', 'Pclass', 'Age', 'Gender', 'Survived']]
 
 print(train_df.head(10))
 
