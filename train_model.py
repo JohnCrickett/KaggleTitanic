@@ -7,15 +7,15 @@ from pybrain.supervised.trainers import BackpropTrainer
 import pandas
 
 
-def normalise(data_high, data_low, range_high, range_low, value):
-    return (((val - data_low) * (range_high - range_low)) / (data_high - data_low)) + range_low
+def normalise(value, data_high, data_low):
+    return (value - data_low) / (data_high - data_low)
 
 
 def build_network(num_features):
     network = FeedForwardNetwork()
     inLayer = LinearLayer(num_features)
-    #hiddenLayer = SigmoidLayer(num_features * 2)
-    hiddenLayer = ReluLayer(num_features)
+    hiddenLayer = SigmoidLayer(num_features * 7)
+    #hiddenLayer = ReluLayer(num_features * 2)
     outLayer = LinearLayer(1)
 
     network.addInputModule(inLayer)
@@ -38,21 +38,19 @@ if __name__ == '__main__':
 
     network = build_network(num_features)
 
-    # normalise the data?
+    # normalise the data
     # calculate range for each column
     max_age = data['Age'].max()
     min_age = data['Age'].min()
-    print("Max age: " + str(max_age))
-    print("Min age: " + str(min_age))
     max_class = data['Pclass'].max()
     min_class = data['Pclass'].min()
-    print("Max class: " + str(max_class))
-    print("Min class: " + str(min_class))
-
-    min_age_nrange = 0
+    min_age_nrange = min_age
     max_age_nrange = max_age
     max_class_nrange = max_class
     min_class_nrange = min_class
+
+    data['Age'] = data['Age'].apply(normalise, args=(max_age_nrange, min_age_nrange))
+    data['Pclass'] = data['Pclass'].apply(normalise, args=(max_class_nrange, min_class_nrange))
 
     # build the training data set
     ds = SupervisedDataSet(num_features, 1)
@@ -60,10 +58,9 @@ if __name__ == '__main__':
         row = list(tuple_row)
         ds.addSample((row[3:-1]), tuple(row[-1:]))
 
-
     trainer = BackpropTrainer(network, ds)
 
-    for i in range(5):
+    for i in range(500):
         error = trainer.train()
         print('\rTraining iteration: {0} error {1}\t\t\t\t\t'.format(i, error), end='')
 
@@ -74,9 +71,9 @@ if __name__ == '__main__':
     for tuple_row in data.itertuples():
         row = list(tuple_row)
         result = network.activate((row[3:-1]))
+        result = 1.0 if result >= 0.5 else 0.0
         if result == row[-1]:
             correct += 1
 
     accuracy = correct / len(data)
     print("Score: " + str(accuracy))
-
