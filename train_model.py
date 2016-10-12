@@ -14,7 +14,7 @@ def normalise(value, data_high, data_low):
 def build_network(num_features):
     network = FeedForwardNetwork()
     inLayer = LinearLayer(num_features)
-    hiddenLayer = SigmoidLayer(num_features * 7)
+    hiddenLayer = SigmoidLayer(num_features - 2)
     #hiddenLayer = ReluLayer(num_features * 2)
     outLayer = LinearLayer(1)
 

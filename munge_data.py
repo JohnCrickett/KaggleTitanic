@@ -8,7 +8,7 @@ train_df = pandas.read_csv('./data/original/train.csv', header=0)
 train_df['Gender'] = train_df['Sex'].map( {'female': 0, 'male': 1} ).astype(int)
 
 # Remove the Name, Ticket and Sex
-train_df = train_df.drop(['Name', 'Ticket', 'Cabin', 'Sex'], axis=1)
+train_df = train_df.drop(['Name', 'Ticket', 'Cabin', 'Sex', 'Fare'], axis=1)
 
 # All missing Embarked -> just make them embark from most common place
 if len(train_df.Embarked[ train_df.Embarked.isnull() ]) > 0:
@@ -26,11 +26,11 @@ if len(train_df.Age[ train_df.Age.isnull() ]) > 0:
 print(train_df.head(10))
 
 #train_df = train_df[['PassengerId', 'Pclass', 'Age', 'SibSp', 'Parch', 'Fare', 'Embarked', 'Gender', 'Survived']]
-train_df = train_df[['PassengerId', 'Pclass', 'Age', 'Gender', 'Survived']]
+train_df = train_df[['PassengerId', 'Pclass', 'Age', 'SibSp', 'Parch', 'Embarked', 'Gender', 'Survived']]
 
 print(train_df.head(10))
 
-train_df.to_csv('./data/train.csv', sep=',', encoding='utf-8')
+train_df.to_csv('./data/train.csv', sep=',', encoding='utf-8', index=None)
 
 
 
@@ -41,7 +41,7 @@ test_df = pandas.read_csv('./data/original/test.csv', header=0)
 test_df['Gender'] = test_df['Sex'].map( {'female': 0, 'male': 1} ).astype(int)
 
 # Remove the Name, Ticket and Sex
-test_df = test_df.drop(['Name', 'Ticket', 'Cabin', 'Sex'], axis=1)
+test_df = test_df.drop(['Name', 'Ticket', 'Cabin', 'Sex', 'Fare'], axis=1)
 
 # All missing Embarked -> just make them embark from most common place
 if len(test_df.Embarked[ test_df.Embarked.isnull() ]) > 0:
@@ -58,8 +58,8 @@ if len(test_df.Age[ test_df.Age.isnull() ]) > 0:
 
 print(test_df.head(10))
 
-test_df = test_df[['PassengerId', 'Pclass', 'Age', 'SibSp', 'Parch', 'Fare', 'Embarked', 'Gender']]
+test_df = test_df[['PassengerId', 'Pclass', 'Age', 'SibSp', 'Parch', 'Embarked', 'Gender']]
 
 print(test_df.head(10))
 
-test_df.to_csv('./data/test.csv', sep=',', encoding='utf-8')
+test_df.to_csv('./data/test.csv', sep=',', encoding='utf-8', index=None)
